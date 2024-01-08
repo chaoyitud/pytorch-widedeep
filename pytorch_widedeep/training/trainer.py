@@ -273,7 +273,7 @@ class Trainer(BaseTrainer):
         with_lds: bool = False,
         **kwargs,
     ):
-        r"""Fit method.
+        r"""Fit methodx_valx_val.
 
         The input datasets can be passed either directly via numpy arrays
         (`X_wide`, `X_tab`, `X_text` or `X_img`) or alternatively, in
@@ -585,7 +585,7 @@ class Trainer(BaseTrainer):
         """
         preds_l = self._predict(X_wide, X_tab, X_text, X_img, X_test, batch_size)
         if self.method == "regression":
-            return np.vstack(preds_l).squeeze(1)
+            return np.vstack(preds_l)
         if self.method == "binary":
             preds = np.vstack(preds_l).squeeze(1)
             return (preds > 0.5).astype("int")
@@ -925,8 +925,8 @@ class Trainer(BaseTrainer):
         X = {k: v.to(self.device) for k, v in data.items()}
         y = (
             target.view(-1, 1).float()
-            if self.method not in ["multiclass", "qregression"]
-            else target
+            if self.method not in ["multiclass", "qregression", "regression"]
+            else target.float()
         )
         y = y.to(self.device)
 
@@ -936,6 +936,7 @@ class Trainer(BaseTrainer):
             _, y_pred = self.model(X, y, epoch)
         else:
             y_pred = self.model(X)
+            y_pred = y_pred.to(self.device)
 
         if self.model.is_tabnet:
             loss = self.loss_fn(y_pred[0], y) - self.lambda_sparse * y_pred[1]
@@ -962,8 +963,8 @@ class Trainer(BaseTrainer):
             X = {k: v.to(self.device) for k, v in data.items()}
             y = (
                 target.view(-1, 1).float()
-                if self.method not in ["multiclass", "qregression"]
-                else target
+                if self.method not in ["multiclass", "qregression", 'regression']
+                else target.float()
             )
             y = y.to(self.device)
 

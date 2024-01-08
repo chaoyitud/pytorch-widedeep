@@ -324,6 +324,7 @@ class BaseTrainer(ABC):
             "binary",
             "multiclass",
             "regression",
+            "qregression",
         ]:
             raise ValueError(
                 "If 'custom_loss_function' is not None, 'objective' must be 'binary' "

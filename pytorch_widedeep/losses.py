@@ -48,6 +48,8 @@ class MSELoss(nn.Module):
         >>> lds_weight = torch.tensor([0.1, 0.2, 0.3, 0.4]).view(-1, 1)
         >>> loss = MSELoss()(input, target, lds_weight)
         """
+        print("input", input.shape)
+        print("target", target.shape)
         loss = (input - target) ** 2
         if lds_weight is not None:
             loss *= lds_weight

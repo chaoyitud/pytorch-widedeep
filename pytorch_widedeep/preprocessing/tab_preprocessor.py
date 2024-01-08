@@ -826,14 +826,15 @@ class ChunkTabPreprocessor(TabPreprocessor):
             )
 
         if self.chunk_counter == self.n_chunks:
-            self.cat_embed_input: List[
-                Union[Tuple[str, int], Tuple[str, int, int]]
-            ] = []
-            for k, v in self.label_encoder.encoding_dict.items():
-                if self.with_attention:
-                    self.cat_embed_input.append((k, len(v)))
-                else:
-                    self.cat_embed_input.append((k, len(v), self.embed_dim[k]))
+            if self.cat_embed_cols is not None:
+                self.cat_embed_input: List[
+                    Union[Tuple[str, int], Tuple[str, int, int]]
+                ] = []
+                for k, v in self.label_encoder.encoding_dict.items():
+                    if self.with_attention:
+                        self.cat_embed_input.append((k, len(v)))
+                    else:
+                        self.cat_embed_input.append((k, len(v), self.embed_dim[k]))
 
             self.is_fitted = True
 
